@@ -4,8 +4,8 @@ import (
 	"context"
 	"log"
 
-	"github.com/adehndr/anime-databases/model/web"
-	"github.com/adehndr/anime-databases/repository"
+	"example.com/adehndr/project_go_proa/model/web"
+	"example.com/adehndr/project_go_proa/repository"
 )
 
 type AnimeListServiceImplementation struct {

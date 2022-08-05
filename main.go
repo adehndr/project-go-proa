@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/adehndr/anime-databases/app"
-	"github.com/adehndr/anime-databases/repository"
-	"github.com/adehndr/anime-databases/service"
+	"example.com/adehndr/project_go_proa/app"
+	"example.com/adehndr/project_go_proa/repository"
+	"example.com/adehndr/project_go_proa/service"
 )
 
 func main() {

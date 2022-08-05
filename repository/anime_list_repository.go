@@ -2,8 +2,8 @@ package repository
 
 import (
 	"context"
-
-	"github.com/adehndr/anime-databases/entity"
+	
+	"example.com/adehndr/project_go_proa/entity"
 )
 
 type AnimeListRepository interface {

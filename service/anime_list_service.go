@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 
-	"github.com/adehndr/anime-databases/model/web"
+	"example.com/adehndr/project_go_proa/model/web"
 )
 
 type AnimeListService interface {
