@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 
 	"example.com/adehndr/project_go_proa/app"
 	"example.com/adehndr/project_go_proa/controller"
@@ -11,6 +12,13 @@ import (
 )
 
 func main() {
+
+	port := os.Getenv("PORT")
+
+    if port == "" {
+        log.Fatal("$PORT must be set")
+    }
+	
 	dbMySql := app.OpenDatabaseConnection()
 	defer dbMySql.Close()
 
@@ -24,7 +32,7 @@ func main() {
 	taskRouter := app.NewRouter(taskController)
 
 	server := http.Server{
-		Addr:    "localhost:3000",
+		Addr:    ":" + port,
 		Handler: taskRouter,
 	}
 	err = server.ListenAndServe()
