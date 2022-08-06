@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"log"
 
 	"example.com/adehndr/project_go_proa/entity"
@@ -46,11 +47,32 @@ func (repository *TaskListRepositoryImpl) FindAll(ctx context.Context) ([]entity
 }
 
 func (repository *TaskListRepositoryImpl) FindById(ctx context.Context, id int) (entity.TaskEntity, error) {
-	var taskEntity entity.TaskEntity
-	return taskEntity, nil
+	var entityTask entity.TaskEntity = entity.TaskEntity{}
+	querySQL := "SELECT id,task_detail,assignee,deadline,is_finished from task_table where id = $1"
+	res, err := repository.DB.QueryContext(ctx, querySQL, id)
+	if err != nil {
+		log.Fatal(err)
+		return entity.TaskEntity{}, err
+	}
+	if res.Next() {
+		err := res.Scan(
+			&entityTask.Id,
+			&entityTask.TaskDetail,
+			&entityTask.Asignee,
+			&entityTask.Deadline,
+			&entityTask.IsFinished,
+		)
+		if err != nil {
+			log.Fatal(err)
+			return entityTask, err
+		}
+		return entityTask, nil
+	} else {
+		return entityTask, errors.New("Task Not Found")
+	}
 }
 
-/* 
+/*
 	Return the same Task, but add the id got from the inserted row on database
 */
 func (repository *TaskListRepositoryImpl) Create(ctx context.Context, task entity.TaskEntity) (entity.TaskEntity, error) {
@@ -66,10 +88,19 @@ func (repository *TaskListRepositoryImpl) Create(ctx context.Context, task entit
 }
 
 func (repository *TaskListRepositoryImpl) Update(ctx context.Context, task entity.TaskEntity) (entity.TaskEntity, error) {
-	var taskEntity entity.TaskEntity
-	return taskEntity, nil
+	querySQL := "UPDATE task_table SET task_detail = $1, assignee = $2, deadline = $3, is_finished = $4 where id = $5 returning id"
+	_, err := repository.DB.ExecContext(ctx, querySQL, task.TaskDetail, task.Asignee, task.Deadline, task.IsFinished, task.Id)
+	if err != nil {
+		return entity.TaskEntity{}, err
+	}
+	return task, nil
 }
 
 func (repository *TaskListRepositoryImpl) Delete(ctx context.Context, id int) error {
+	querySQL := "DELETE FROM task_table where id = $1"
+	_, err := repository.DB.ExecContext(ctx, querySQL, id)
+	if err != nil {
+		return err
+	}
 	return nil
 }
