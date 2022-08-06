@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	"example.com/adehndr/project_go_proa/entity"
@@ -23,6 +24,7 @@ func (service *TaskListServiceImplementation) FindAll(ctx context.Context) ([]we
 	data, err := service.taskListRepository.FindAll(ctx)
 	var webTaskResponseList []web.TaskResponse = []web.TaskResponse{}
 	if err != nil {
+		fmt.Println("Error di service", err.Error())
 		log.Fatal(err)
 		return webTaskResponseList, err
 	}

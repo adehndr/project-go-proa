@@ -20,14 +20,14 @@ func NewTaskListRepository(db *sql.DB) TaskListRepository {
 }
 
 func (repository *TaskListRepositoryImpl) FindAll(ctx context.Context) ([]entity.TaskEntity, error) {
+	var taskList []entity.TaskEntity
 	sqlQuery := "SELECT id,task_detail,assignee, deadline, is_finished from task_table"
 	rows, err := repository.DB.QueryContext(ctx, sqlQuery)
 	if err != nil {
 		log.Fatal(err)
-		return nil, err
+		return taskList, err
 	}
 	defer rows.Close()
-	var taskList []entity.TaskEntity
 	for rows.Next() {
 		objTask := entity.TaskEntity{}
 		err := rows.Scan(
@@ -39,7 +39,7 @@ func (repository *TaskListRepositoryImpl) FindAll(ctx context.Context) ([]entity
 		)
 		if err != nil {
 			log.Fatal(err)
-			return nil, err
+			return taskList, err
 		}
 		taskList = append(taskList, objTask)
 	}
