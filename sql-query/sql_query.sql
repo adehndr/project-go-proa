@@ -6,3 +6,5 @@ INSERT INTO anime_list(title,description,episodes,aired) VALUES('Naruto','A ninj
 
 CREATE TABLE task_table (id serial PRIMARY KEY, task_detail VARCHAR(4096), assignee VARCHAR(512), deadline DATE, is_finished BOOLEAN, created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP );
 insert into task_table(task_detail,assignee,deadline,is_finished) values('ini tes','ade',now(),false);
+alter table task_table alter column is_finished set default false;
+ALTER TABLE task_table alter column deadline set not null;
