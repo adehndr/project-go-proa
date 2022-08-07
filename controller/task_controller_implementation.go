@@ -2,7 +2,6 @@ package controller
 
 import (
 	"encoding/json"
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -61,20 +60,30 @@ func (controller *TaskControllerImpl) Detail(w http.ResponseWriter, r *http.Requ
 				panic(err)
 			}
 			resultResponse = web.TaskUpdateRequest2{
-				Id: result.Id,
-				Asignee: result.Asignee,
+				Id:         result.Id,
+				Asignee:    result.Asignee,
 				TaskDetail: result.TaskDetail,
 				IsFinished: result.IsFinished,
-				Deadline: result.Deadline.Format("2006-01-02"),
+				Deadline:   result.Deadline.Format("2006-01-02"),
 			}
+			t.ExecuteTemplate(w, "create.gohtml", map[string]interface{}{
+				"DetailTask": resultResponse,
+			})
+		} else {
+			t.ExecuteTemplate(w, "create.gohtml", map[string]interface{}{
+				"DetailTask": "",
+			})
 		}
-		fmt.Println(resultResponse)
-		t.ExecuteTemplate(w, "create.gohtml", map[string]interface{}{
-			"DetailTask" : resultResponse,
-		})
+
 		return
 	}
-	_, err = helper.PostTask(r)
+	action = r.FormValue("action")
+	if action == "create" {
+		_, err = helper.PostTask(r)
+	}else {
+		_, err = helper.UpdateTask(r)
+	}
+
 	if err != nil {
 		panic(err)
 	}
@@ -82,7 +91,6 @@ func (controller *TaskControllerImpl) Detail(w http.ResponseWriter, r *http.Requ
 }
 
 func (controller *TaskControllerImpl) Change(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	fmt.Println("Redirect")
 	idParams, err := strconv.Atoi(params.ByName("taskid"))
 	action := r.URL.Query().Get("action")
 	findResponse, err := controller.Service.FindById(r.Context(), idParams)

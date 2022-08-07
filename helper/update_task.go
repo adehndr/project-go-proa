@@ -3,29 +3,32 @@ package helper
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	"example.com/adehndr/project_go_proa/model/web"
 )
 
-func PostTask(r *http.Request) (web.TaskCreateResponse, error) {
-	fmt.Println("Ini create")
+func UpdateTask(r *http.Request) (web.TaskCreateResponse, error) {
 	var err error
+
 	var payloadRequest web.TaskCreateRequest = web.TaskCreateRequest{}
 	payloadRequest.TaskDetail = r.FormValue("detail_task")
 	payloadRequest.Asignee = r.FormValue("assignee")
+	idTask := r.FormValue("id")
+	// isFinished := r.FormValue("is_finished")
 	tempVar := r.FormValue("deadline")
 	myDate, err := time.Parse("2006-01-02", tempVar)
 	payloadRequest.Deadline = myDate
-	payloadRequest.IsFinished = false
+	booleanParsed, err := strconv.ParseBool(r.FormValue("is_finished"))
+	payloadRequest.IsFinished = booleanParsed
 
 	finalPayload, err := json.Marshal(payloadRequest)
 	if err != nil {
 		panic(err)
 	}
-	request, err := http.NewRequest("POST", "http://localhost:3000/api/tasks", bytes.NewBuffer(finalPayload))
+	request, err := http.NewRequest("PUT", "http://localhost:3000/api/task/"+idTask, bytes.NewBuffer(finalPayload))
 	request.Header.Set("Content-Type", "application/json")
 
 	var tempWebResponse web.TaskCreateResponse = web.TaskCreateResponse{}

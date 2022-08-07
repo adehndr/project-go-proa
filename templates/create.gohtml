@@ -12,25 +12,37 @@
     <div class="content">
         <div class="create">
         <h2>Add a new Blog !</h2>
+        {{with .DetailTask}}
+        <h1>edit</h1>
         <form method="POST" action = "/detail">
-            {{with .DetailTask}}
-                <label>Task :</label>
-                <input required type="text" name="detail_task" value = {{.TaskDetail}}>
-                <label>Assign to:</label>
-                <input required type="text" name="assignee" value = {{.Asignee}} >
-                <label>Deadline</label>
-                <input required type="date" name="deadline" value = {{.Deadline}}>
-            {{else}}
-                <label>Task :</label>
-                <input required type="text" name="detail_task">
-                <label>Assign to:</label>
-                <input required type="text" name="assignee">
-                <label>Deadline</label>
-                <input required type="date" name="deadline">
-            {{end}}
-
+            <label>Task :</label>
+            <input required type="text" name="detail_task" value = {{.TaskDetail}}>
+            <label>Assign to:</label>
+            <input required type="text" name="assignee" value = {{.Asignee}} >
+            <label>Deadline</label>
+            <input required type="date" name="deadline" value = {{.Deadline}}>
+            <input type="hidden" name="is_finished" value="{{.IsFinished}}"/> 
+            <input type="hidden" name="id" value="{{.Id}}"/> 
+            <input type="hidden" name="action" value="edit"/> 
             <button>Add blog !</button>
-        </form>
+        </form>        
+        {{else}}
+        <h1>Create</h1>
+        <form method="POST" action = "/detail" enctype="multipart/form-data"> 
+         <fieldset>
+            <label>Task :</label>
+            <input required type="text" name="detail_task">
+            <label>Assign to:</label>
+            <input required type="text" name="assignee">
+            <label>Deadline</label>
+            <input required type="date" name="deadline">
+            <input type="hidden" name="action" value="create"/> 
+            <input type="submit" value="Submit">
+            </fieldset>
+        </form>     
+        {{end}}
+
+
     </div>
     </div>
 </body>
