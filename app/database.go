@@ -17,8 +17,9 @@ func OpenDatabaseConnection() *sql.DB {
 	dbHost := os.Getenv("DB_HOST")
 	dbPort := os.Getenv("DB_PORT")
 	dbName := os.Getenv("DB_NAME")
-	psqlInfo := fmt.Sprintf("host=%s user=%s password=%s port=%s dbname=%s sslmode=require",
-	dbHost, dbUser, dbPassword, dbPort, dbName)
+	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=require",
+	dbHost, dbPort,dbUser, dbPassword,dbName)
+	log.Fatal(psqlInfo)
 	db, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
 		log.Fatal(err)
