@@ -25,30 +25,75 @@ func NewTaskController(service service.TaskListService) TaskController {
 }
 
 func (controller *TaskControllerImpl) Home(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	data, err := helper.FetchTasks()
-	if err != nil {
-		panic(err)
-	}
-	t := template.Must(template.ParseGlob("./templates/*.gohtml"))
-	t.ExecuteTemplate(w, "index.gohtml", map[string]interface{}{
-		"DetailTask": data.Data,
-	})
-}
-
-func (controller *TaskControllerImpl) Detail(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	t := template.Must(template.ParseGlob("./templates/*.gohtml"))
-	fmt.Println("Ini kepanggil 1")
 	if r.Method != http.MethodPost {
-		t.ExecuteTemplate(w, "create.gohtml", map[string]interface{}{
-			"DetailTask": "",
+		t := template.New("index.gohtml")
+		data, err := helper.FetchTasks()
+		if err != nil {
+			panic(err)
+		}
+		t, err = template.ParseGlob("./templates/*.gohtml")
+		if err != nil {
+			panic(err)
+		}
+		t.ExecuteTemplate(w, "index.gohtml", map[string]interface{}{
+			"DetailTask": data.Data,
 		})
 		return
 	}
-	_, err := helper.PostTask(r)
+
+}
+
+func (controller *TaskControllerImpl) Detail(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	var err error
+	idTask := r.URL.Query().Get("action")
+	t := template.Must(template.ParseGlob("./templates/*.gohtml"))
+	if r.Method != http.MethodPost {
+		var resultResponse web.TaskResponse
+		if idTask != "" {
+			idTaskInt, err := strconv.Atoi(idTask)
+			if err != nil {
+				panic(err)
+			}
+			result, err := controller.Service.FindById(r.Context(), idTaskInt)
+			if err != nil {
+				panic(err)
+			}
+			resultResponse = result
+		}
+		t.ExecuteTemplate(w, "create.gohtml", map[string]interface{}{
+			"DetailTask": resultResponse,
+		})
+		return
+	}
+	_, err = helper.PostTask(r)
 	if err != nil {
 		panic(err)
 	}
 	http.Redirect(w, r, "http://localhost:3000/", 301)
+}
+
+func (controller *TaskControllerImpl) Change(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	fmt.Println("Redirect")
+	idParams, err := strconv.Atoi(params.ByName("taskid"))
+	action := r.URL.Query().Get("action")
+	findResponse, err := controller.Service.FindById(r.Context(), idParams)
+	if err != nil {
+		panic(err)
+	}
+	if action == "done" {
+		webTaskReq := web.TaskUpdateRequest{
+			Id:         findResponse.Id,
+			TaskDetail: findResponse.TaskDetail,
+			Asignee:    findResponse.Asignee,
+			Deadline:   findResponse.Deadline,
+			IsFinished: true,
+		}
+		controller.Service.Update(r.Context(), webTaskReq)
+		http.Redirect(w, r, "http://localhost:3000/", 301)
+	} else {
+		http.Redirect(w, r, "http://localhost:3000/detail", 301)
+	}
+
 }
 
 func (controller *TaskControllerImpl) FindAll(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
@@ -71,11 +116,6 @@ func (controller *TaskControllerImpl) FindAll(w http.ResponseWriter, r *http.Req
 
 func (controller *TaskControllerImpl) FindById(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	idParams, err := strconv.Atoi(params.ByName("taskid"))
-	encoder := json.NewEncoder(w)
-	w.Header().Add("Content-Type", "application/json; charset=utf-8")
-	if err != nil {
-		log.Fatal(err)
-	}
 	result, err := controller.Service.FindById(r.Context(), idParams)
 	webResponse := web.WebResponse{}
 	if err != nil {
@@ -86,7 +126,13 @@ func (controller *TaskControllerImpl) FindById(w http.ResponseWriter, r *http.Re
 		webResponse.Data = result
 		w.WriteHeader(http.StatusOK)
 	}
+	encoder := json.NewEncoder(w)
+	w.Header().Add("Content-Type", "application/json; charset=utf-8")
+	if err != nil {
+		log.Fatal(err)
+	}
 	encoder.Encode(webResponse)
+
 }
 
 func (controller *TaskControllerImpl) Create(w http.ResponseWriter, r *http.Request, params httprouter.Params) {

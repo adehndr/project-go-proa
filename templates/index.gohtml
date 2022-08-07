@@ -29,11 +29,19 @@
                 <p>
                     Deadline : {{$element.Deadline}}
                 </p>
-                <button type="button">EDIT</button>
+                <form method="GET" action="/detail/{{$element.Id}}">
+                    <input type="hidden" name="action" value="edit"/> 
+                    <button>EDIT</button>
+                </form>
+
                 {{if $element.IsFinished}}
                     <h3>Task Finished</h3>
                 {{else }}
-                    <button type="button">Mark as Done</button>
+                <form method="GET" action="/change/{{$element.Id}}">
+                    <input type="hidden" name="action" value="done"/> 
+                    <button>Mark as Done</button>
+                </form>
+
                 {{end}}
             {{else}}
                 <h1>Belum ada data</h1>    

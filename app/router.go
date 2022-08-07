@@ -10,6 +10,7 @@ func NewRouter(taskController controller.TaskController) *httprouter.Router {
 	router.GET("/", taskController.Home)
 	router.GET("/detail", taskController.Detail)
 	router.POST("/detail", taskController.Detail)
+	router.GET("/change/:taskid",taskController.Change)
 	router.GET("/api/tasks", taskController.FindAll)
 	router.GET("/api/task/:taskid", taskController.FindById)
 	router.POST("/api/tasks", taskController.Create)

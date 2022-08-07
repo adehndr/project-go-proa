@@ -13,12 +13,22 @@
         <div class="create">
         <h2>Add a new Blog !</h2>
         <form method="POST" action = "/detail">
-            <label>Task :</label>
-            <input required type="text" name="detail_task">
-            <label>Assign to:</label>
-            <input required type="text" name="assignee">
-            <label>Deadline</label>
-            <input required type="date" name="deadline">
+            {{with .resultResponse}}
+                <label>Task :</label>
+                <input required type="text" name="detail_task" placeholder = {{.TaskDetail}}>
+                <label>Assign to:</label>
+                <input required type="text" name="assignee">
+                <label>Deadline</label>
+                <input required type="date" name="deadline">
+            {{else}}
+                <label>Task :</label>
+                <input required type="text" name="detail_task">
+                <label>Assign to:</label>
+                <input required type="text" name="assignee">
+                <label>Deadline</label>
+                <input required type="date" name="deadline">
+            {{end}}
+
             <button>Add blog !</button>
         </form>
     </div>
