@@ -10,8 +10,8 @@ import (
 	_ "github.com/lib/pq"
 )
 
-
 func OpenDatabaseConnection() *sql.DB {
+
 	dbUser := os.Getenv("DB_USER")
 	dbPassword := os.Getenv("DB_PASSWORD")
 	dbHost := os.Getenv("DB_HOST")

@@ -1,1 +1,1 @@
-web: project_go_proa
+web: bin/project_go_proa
