@@ -13,13 +13,13 @@
         <div class="create">
         <h2>Add a new Blog !</h2>
         <form method="POST" action = "/detail">
-            {{with .resultResponse}}
+            {{with .DetailTask}}
                 <label>Task :</label>
-                <input required type="text" name="detail_task" placeholder = {{.TaskDetail}}>
+                <input required type="text" name="detail_task" value = {{.TaskDetail}}>
                 <label>Assign to:</label>
-                <input required type="text" name="assignee">
+                <input required type="text" name="assignee" value = {{.Asignee}} >
                 <label>Deadline</label>
-                <input required type="date" name="deadline">
+                <input required type="date" name="deadline" value = {{.Deadline}}>
             {{else}}
                 <label>Task :</label>
                 <input required type="text" name="detail_task">

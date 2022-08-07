@@ -45,12 +45,14 @@ func (controller *TaskControllerImpl) Home(w http.ResponseWriter, r *http.Reques
 
 func (controller *TaskControllerImpl) Detail(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	var err error
-	idTask := r.URL.Query().Get("action")
+	query := r.URL.Query()
+	action := query.Get("action")
+	idParams := query.Get("id")
 	t := template.Must(template.ParseGlob("./templates/*.gohtml"))
 	if r.Method != http.MethodPost {
-		var resultResponse web.TaskResponse
-		if idTask != "" {
-			idTaskInt, err := strconv.Atoi(idTask)
+		var resultResponse web.TaskUpdateRequest2
+		if action != "" {
+			idTaskInt, err := strconv.Atoi(idParams)
 			if err != nil {
 				panic(err)
 			}
@@ -58,10 +60,17 @@ func (controller *TaskControllerImpl) Detail(w http.ResponseWriter, r *http.Requ
 			if err != nil {
 				panic(err)
 			}
-			resultResponse = result
+			resultResponse = web.TaskUpdateRequest2{
+				Id: result.Id,
+				Asignee: result.Asignee,
+				TaskDetail: result.TaskDetail,
+				IsFinished: result.IsFinished,
+				Deadline: result.Deadline.Format("2006-01-02"),
+			}
 		}
+		fmt.Println(resultResponse)
 		t.ExecuteTemplate(w, "create.gohtml", map[string]interface{}{
-			"DetailTask": resultResponse,
+			"DetailTask" : resultResponse,
 		})
 		return
 	}
