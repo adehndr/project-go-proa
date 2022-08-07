@@ -35,8 +35,5 @@ func main() {
 		Addr:    ":" + port,
 		Handler: taskRouter,
 	}
-	err = server.ListenAndServe()
-	if err != nil {
-		log.Fatal(err)
-	}
+	log.Fatal(server.ListenAndServe())
 }
