@@ -5,24 +5,148 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
+    <style> 
+    
+    @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+
+/* base styles */
+* {
+  margin: 0;
+  font-family: "Quicksand";
+  color: #333;
+}
+.navbar {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  max-width: 600px;
+  margin: 0 auto;
+  border-bottom: 1px solid #f2f2f2;
+}
+.navbar h1 {
+  color: #f1356d;
+}
+.navbar .links {
+  margin-left: auto;
+}
+.navbar a {
+  margin-left: 16px;
+  text-decoration: none;
+  padding: 6px;
+}
+.navbar a:hover {
+  color: #f1356d;
+  font-style: italic;
+}
+.content {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.blog-preview{
+  padding: 12px 20px;
+  margin: 20px 0;
+  border-bottom: 1px solid #D3D3D3;
+  word-wrap: break-word
+}
+.blog-preview::after{
+  content:"";
+  display:block;
+  clear:both;
+}
+.blog-preview:hover{
+  box-shadow: 1px 3px 5px rgba(0, 0, 0,0.1);
+}
+.blog-preview h2 {
+  font-size: 20px;
+  color: #f1356d;
+  margin-bottom: 8px;
+}
+
+.blog-preview h4{
+    margin-top:8px;
+    margin-bottom:20px;
+}
+
+.blog-preview a{
+  text-decoration: none;
+}
+
+.blog-preview button{
+  background: #f1356d;
+  color: #fff;
+  border: 0;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 20px 6px;
+  float: right;
+}
+
+/* Blog details style */
+
+.blogs-details h2 {
+  font-size: 20px;
+  color: #f1356d;
+  margin-bottom: 10px;
+}
+.blogs-details h3 {
+  margin: 6px 0;
+}
+
+.blogs-details button {
+  background: #f1356d;
+  color: #fff;
+  border: 0;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 20px auto;
+  float: right|top;
+}
+
+.create {
+  max-width: 400px;
+  margin: 0px auto;
+  text-align: center;
+}
+.create label{
+  display: block;
+  text-align: left;
+}
+
+.create input, .create select, .create textarea{
+  width: 100%;
+}
+
+.create button{
+  background: #f1356d;
+  color: #fff;
+  border: 0;
+  padding: 8px;
+  margin: 20px 0;
+  cursor: pointer;
+}
+    </style>
     <title>Document</title>
 </head>
 
 <body>
     <div class="content">
         <div class="navbar">
-            <h1>The Dojo Blog</h1>
+            <h1>Task Assigner</h1>
             <div class="links">
-                <a href="#">Home</a>
-                <a href="http://localhost:3000/detail">New Blog</a>
+                <a href="http://localhost:3000">Home</a>
+                <a href="http://localhost:3000/detail">New Task</a>
             </div>
         </div>
-        <div class="task_list blog-preview">
+        <div class="blog-list">
             {{range $index,$element := .DetailTask}}
-                <p>
+                <div class="task_list blog-preview">
+                <h2>
                     {{$element.TaskDetail}}
-                </p>
+                </h2>
                 <h3>
                     Assigned to : {{$element.Asignee}}
                 </h3>
@@ -32,22 +156,24 @@
                 <form method="GET" action="/detail">
                     <input type="hidden" name="action" value="edit"/> 
                     <input type="hidden" name="id" value="{{$element.Id}}"/> 
-                    <button>EDIT</button>
+                    <button class = "button">EDIT</button>
                 </form>
 
                 {{if $element.IsFinished}}
-                    <h3>Task Finished</h3>
+                    <h4>Task Finished</h4>
                 {{else }}
                 <form method="GET" action="/change/{{$element.Id}}">
                     <input type="hidden" name="action" value="done"/> 
                     <button>Mark as Done</button>
                 </form>
-
                 {{end}}
+                </div>
             {{else}}
-                <h1>Belum ada data</h1>    
+                <h2>No available tasks yet </h2>    
             {{end}}
+
         </div>
+
     </div>
 </body>
 

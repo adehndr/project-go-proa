@@ -6,14 +6,139 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style> 
+    
+    @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+
+/* base styles */
+* {
+  margin: 0;
+  font-family: "Quicksand";
+  color: #333;
+}
+.navbar {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  max-width: 600px;
+  margin: 0 auto;
+  border-bottom: 1px solid #f2f2f2;
+}
+.navbar h1 {
+  color: #f1356d;
+}
+.navbar .links {
+  margin-left: auto;
+}
+.navbar a {
+  margin-left: 16px;
+  text-decoration: none;
+  padding: 6px;
+}
+.navbar a:hover {
+  color: #f1356d;
+  font-style: italic;
+}
+.content {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.blog-preview{
+  padding: 12px 20px;
+  margin: 20px 0;
+  border-bottom: 1px solid #D3D3D3;
+}
+.blog-preview:hover{
+  box-shadow: 1px 3px 5px rgba(0, 0, 0,0.1);
+}
+.blog-preview h2 {
+  font-size: 20px;
+  color: #f1356d;
+  margin-bottom: 8px;
+}
+
+.blog-preview h4{
+    margin-top:8px;
+    margin-bottom:40px;
+}
+
+.blog-preview a{
+  text-decoration: none;
+}
+
+.blog-preview button{
+  background: #f1356d;
+  color: #fff;
+  border: 0;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 20px auto;
+  float: right;
+}
+
+/* Blog details style */
+
+.blogs-details h2 {
+  font-size: 20px;
+  color: #f1356d;
+  margin-bottom: 10px;
+}
+.blogs-details h3 {
+  margin: 6px 0;
+}
+
+.blogs-details button {
+  background: #f1356d;
+  color: #fff;
+  border: 0;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 20px auto;
+  float: right|top;
+}
+
+.create {
+  max-width: 400px;
+  margin: 0px auto;
+  text-align: center;
+}
+.create label{
+  display: block;
+  text-align: left;
+}
+
+.create input, .create select, .create textarea{
+  width: 100%;
+}
+
+.create button, .create .button{
+  background: #f1356d;
+  color: #fff;
+  border: 0;
+  padding: 8px;
+  margin: 20px 0;
+  cursor: pointer;
+}
+    </style>
 </head>
 
 <body>
     <div class="content">
+            <div class="navbar">
+            <h1>Task Assigner</h1>
+            <div class="links">
+                <a href="http://localhost:3000">Home</a>
+                <a href="http://localhost:3000/detail">New Task</a>
+            </div>
+        </div>
         <div class="create">
-        <h2>Add a new Blog !</h2>
+        <h2>Add a new Task!</h2>
         {{with .DetailTask}}
-        <h1>edit</h1>
+        <h4>Edit task</h4>
         <form method="POST" action = "/detail">
             <label>Task :</label>
             <input required type="text" name="detail_task" value = {{.TaskDetail}}>
@@ -24,12 +149,11 @@
             <input type="hidden" name="is_finished" value="{{.IsFinished}}"/> 
             <input type="hidden" name="id" value="{{.Id}}"/> 
             <input type="hidden" name="action" value="edit"/> 
-            <button>Add blog !</button>
+            <input class = "button" type="submit" value="Add Task !">
         </form>        
         {{else}}
-        <h1>Create</h1>
+        <h4>Create task</h4>
         <form method="POST" action = "/detail" enctype="multipart/form-data"> 
-         <fieldset>
             <label>Task :</label>
             <input required type="text" name="detail_task">
             <label>Assign to:</label>
@@ -37,8 +161,7 @@
             <label>Deadline</label>
             <input required type="date" name="deadline">
             <input type="hidden" name="action" value="create"/> 
-            <input type="submit" value="Submit">
-            </fieldset>
+            <input class = "button" type="submit" value="Submit">
         </form>     
         {{end}}
 
