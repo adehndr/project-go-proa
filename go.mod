@@ -1,5 +1,6 @@
 module example.com/adehndr/project_go_proa
 
+// +heroku goVersion go1.18
 go 1.18
 
 require (
