@@ -15,10 +15,10 @@ func main() {
 
 	port := os.Getenv("PORT")
 
-    if port == "" {
-        log.Fatal("$PORT must be set")
-    }
-	
+	if port == "" {
+		port = "3000"
+	}
+
 	dbMySql := app.OpenDatabaseConnection()
 	defer dbMySql.Close()
 

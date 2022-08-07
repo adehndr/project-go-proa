@@ -2,10 +2,12 @@ package controller
 
 import (
 	"encoding/json"
+	"html/template"
 	"log"
 	"net/http"
 	"strconv"
 
+	"example.com/adehndr/project_go_proa/helper"
 	"example.com/adehndr/project_go_proa/model/web"
 	"example.com/adehndr/project_go_proa/service"
 	"github.com/julienschmidt/httprouter"
@@ -19,6 +21,17 @@ func NewTaskController(service service.TaskListService) TaskController {
 	return &TaskControllerImpl{
 		Service: service,
 	}
+}
+
+func (controller *TaskControllerImpl) Home(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	data, err := helper.FetchTasks()
+	if err != nil {
+		panic(err)
+	}
+	t := template.Must(template.ParseGlob("./templates/*.gohtml"))
+	t.ExecuteTemplate(w, "index.gohtml", map[string]interface{}{
+		"DetailTask" : data.Data,
+	})
 }
 
 func (controller *TaskControllerImpl) FindAll(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
@@ -107,10 +120,10 @@ func (controller *TaskControllerImpl) Delete(w http.ResponseWriter, r *http.Requ
 		panic(err)
 	}
 	encoder := json.NewEncoder(w)
-	err = controller.Service.Delete(r.Context(),idParams)
+	err = controller.Service.Delete(r.Context(), idParams)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-	}else {
+	} else {
 		webResponse.Status = "success"
 		w.WriteHeader(http.StatusOK)
 	}

@@ -7,6 +7,7 @@ import (
 )
 
 type TaskController interface {
+	Home(w http.ResponseWriter, r *http.Request, params httprouter.Params)
 	Create(w http.ResponseWriter, r *http.Request, params httprouter.Params)
 	Update(w http.ResponseWriter, r *http.Request, params httprouter.Params)
 	Delete(w http.ResponseWriter, r *http.Request, params httprouter.Params)
