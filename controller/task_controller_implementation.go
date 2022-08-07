@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/json"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -30,8 +31,24 @@ func (controller *TaskControllerImpl) Home(w http.ResponseWriter, r *http.Reques
 	}
 	t := template.Must(template.ParseGlob("./templates/*.gohtml"))
 	t.ExecuteTemplate(w, "index.gohtml", map[string]interface{}{
-		"DetailTask" : data.Data,
+		"DetailTask": data.Data,
 	})
+}
+
+func (controller *TaskControllerImpl) Detail(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	t := template.Must(template.ParseGlob("./templates/*.gohtml"))
+	fmt.Println("Ini kepanggil 1")
+	if r.Method != http.MethodPost {
+		t.ExecuteTemplate(w, "create.gohtml", map[string]interface{}{
+			"DetailTask": "",
+		})
+		return
+	}
+	_, err := helper.PostTask(r)
+	if err != nil {
+		panic(err)
+	}
+	http.Redirect(w, r, "http://localhost:3000/", 301)
 }
 
 func (controller *TaskControllerImpl) FindAll(w http.ResponseWriter, r *http.Request, params httprouter.Params) {

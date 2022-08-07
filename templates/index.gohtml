@@ -15,12 +15,26 @@
             <h1>The Dojo Blog</h1>
             <div class="links">
                 <a href="#">Home</a>
-                <a href="#">New Blog</a>
+                <a href="http://localhost:3000/detail">New Blog</a>
             </div>
         </div>
         <div class="task_list blog-preview">
             {{range $index,$element := .DetailTask}}
-                <h1>{{$element}}</h1>
+                <p>
+                    {{$element.TaskDetail}}
+                </p>
+                <h3>
+                    Assigned to : {{$element.Asignee}}
+                </h3>
+                <p>
+                    Deadline : {{$element.Deadline}}
+                </p>
+                <button type="button">EDIT</button>
+                {{if $element.IsFinished}}
+                    <h3>Task Finished</h3>
+                {{else }}
+                    <button type="button">Mark as Done</button>
+                {{end}}
             {{else}}
                 <h1>Belum ada data</h1>    
             {{end}}
