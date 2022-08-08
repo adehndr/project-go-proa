@@ -28,7 +28,7 @@ func UpdateTask(r *http.Request) (web.TaskCreateResponse, error) {
 	if err != nil {
 		panic(err)
 	}
-	request, err := http.NewRequest("PUT", "http://localhost:3000/api/task/"+idTask, bytes.NewBuffer(finalPayload))
+	request, err := http.NewRequest("PUT", "https://go-project-proa.herokuapp.com/api/task/"+idTask, bytes.NewBuffer(finalPayload))
 	request.Header.Set("Content-Type", "application/json")
 
 	var tempWebResponse web.TaskCreateResponse = web.TaskCreateResponse{}

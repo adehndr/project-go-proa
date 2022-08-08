@@ -87,7 +87,7 @@ func (controller *TaskControllerImpl) Detail(w http.ResponseWriter, r *http.Requ
 	if err != nil {
 		panic(err)
 	}
-	http.Redirect(w, r, "http://localhost:3000/", 301)
+	http.Redirect(w, r, "https://go-project-proa.herokuapp.com/", 301)
 }
 
 func (controller *TaskControllerImpl) Change(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
@@ -106,9 +106,9 @@ func (controller *TaskControllerImpl) Change(w http.ResponseWriter, r *http.Requ
 			IsFinished: true,
 		}
 		controller.Service.Update(r.Context(), webTaskReq)
-		http.Redirect(w, r, "http://localhost:3000/", 301)
+		http.Redirect(w, r, "https://go-project-proa.herokuapp.com/", 301)
 	} else {
-		http.Redirect(w, r, "http://localhost:3000/detail", 301)
+		http.Redirect(w, r, "https://go-project-proa.herokuapp.com/detail", 301)
 	}
 
 }

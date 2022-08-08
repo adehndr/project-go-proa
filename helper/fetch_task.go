@@ -11,7 +11,7 @@ func FetchTasks() (web.WebResponseRequest, error) {
 	var err error
 	var client = &http.Client{}
 	var tempWebResponse web.WebResponseRequest = web.WebResponseRequest{}
-	request, err := http.NewRequest("GET", "http://localhost:3000/api/tasks", nil)
+	request, err := http.NewRequest("GET", "https://go-project-proa.herokuapp.com/api/tasks", nil)
 	if err != nil {
 		return tempWebResponse, err
 	}

@@ -25,7 +25,7 @@ func PostTask(r *http.Request) (web.TaskCreateResponse, error) {
 	if err != nil {
 		panic(err)
 	}
-	request, err := http.NewRequest("POST", "http://localhost:3000/api/tasks", bytes.NewBuffer(finalPayload))
+	request, err := http.NewRequest("POST", "https://go-project-proa.herokuapp.com/api/tasks", bytes.NewBuffer(finalPayload))
 	request.Header.Set("Content-Type", "application/json")
 
 	var tempWebResponse web.TaskCreateResponse = web.TaskCreateResponse{}
