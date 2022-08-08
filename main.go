@@ -8,7 +8,10 @@ import (
 	"os"
 	"time"
 
-	"github.com/julienschmidt/httprouter"
+	"example.com/adehndr/project_go_proa/app"
+	"example.com/adehndr/project_go_proa/controller"
+	"example.com/adehndr/project_go_proa/repository"
+	"example.com/adehndr/project_go_proa/service"
 	_ "github.com/lib/pq"
 )
 
@@ -35,27 +38,13 @@ func main() {
 		port = "3000"
 	}
 	defer db.Close()
-	tesHandler := httprouter.New()
-	tesHandler.GET("/", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) { fmt.Fprint(w, "Success") })
-	tesHandler.GET("/test", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-		var tempStr []string = []string{}
-		data, err := db.QueryContext(r.Context(), "SELECT task_detail FROM task_table")
-		if err != nil {
-			panic(err)
-		}
-		for data.Next() {
-			var tempData string
-			err = data.Scan(&tempData)
-			if err != nil {
-				panic(err)
-			}
-			tempStr = append(tempStr, tempData)
-		}
-		fmt.Fprint(w, tempStr)
-	})
+	taskRepository := repository.NewTaskListRepository(db)
+	taskService := service.NewTaskListService(taskRepository)
+	taskController := controller.NewTaskController(taskService)
+	router := app.NewRouter(taskController)
 	server := http.Server{
 		Addr:    ":" + port,
-		Handler: tesHandler,
+		Handler: router,
 	}
 	log.Fatal(server.ListenAndServe())
 }
