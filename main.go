@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/julienschmidt/httprouter"
 	_ "github.com/lib/pq"
@@ -24,6 +25,9 @@ func main() {
 		dbHost, dbUser, dbPassword, dbPort, dbName)
 
 	db, err := sql.Open("postgres", psqlInfo)
+	db.SetConnMaxIdleTime(time.Minute * 3)
+	db.SetMaxOpenConns(10)
+	db.SetMaxIdleConns(10)
 	if err != nil {
 		panic(err)
 	}
