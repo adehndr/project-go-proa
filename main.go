@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"log"
 	"net/http"
 	"os"
@@ -9,6 +10,15 @@ import (
 	"example.com/adehndr/project_go_proa/controller"
 	"example.com/adehndr/project_go_proa/repository"
 	"example.com/adehndr/project_go_proa/service"
+	"github.com/julienschmidt/httprouter"
+)
+
+var (
+	dbMySql            *sql.DB                       = app.OpenDatabaseConnection()
+	taskListRepository repository.TaskListRepository = repository.NewTaskListRepository(dbMySql)
+	taskListSevice     service.TaskListService       = service.NewTaskListService(taskListRepository)
+	taskController     controller.TaskController     = controller.NewTaskController(taskListSevice)
+	taskRouter         *httprouter.Router            = (*httprouter.Router)(app.NewRouter(taskController))
 )
 
 func main() {
@@ -18,8 +28,6 @@ func main() {
 	if port == "" {
 		port = "3000"
 	}
-
-	dbMySql := app.OpenDatabaseConnection()
 	defer dbMySql.Close()
 
 	err := dbMySql.Ping()
@@ -27,11 +35,6 @@ func main() {
 		log.Fatal(err)
 		panic(err)
 	}
-	taskListRepository := repository.NewTaskListRepository(dbMySql)
-	taskListSevice := service.NewTaskListService(taskListRepository)
-	taskController := controller.NewTaskController(taskListSevice)
-	taskRouter := app.NewRouter(taskController)
-
 	server := http.Server{
 		Addr:    ":" + port,
 		Handler: taskRouter,
