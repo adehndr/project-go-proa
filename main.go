@@ -7,39 +7,37 @@ import (
 	"net/http"
 	"os"
 
-	"example.com/adehndr/project_go_proa/app"
-	"example.com/adehndr/project_go_proa/controller"
-	"example.com/adehndr/project_go_proa/repository"
-	"example.com/adehndr/project_go_proa/service"
 	"github.com/julienschmidt/httprouter"
 )
 
-var (
-	dbUser             string                        = os.Getenv("DB_USER")
-	dbPassword         string                        = os.Getenv("DB_USER")
-	dbHost             string                        = os.Getenv("DB_USER")
-	dbPort             string                        = os.Getenv("DB_USER")
-	dbName             string                        = os.Getenv("DB_USER")
+/* var (
 	dbMySql            *sql.DB                       = app.OpenDatabaseConnection(dbUser, dbPassword, dbHost, dbPort, dbName)
 	taskListRepository repository.TaskListRepository = repository.NewTaskListRepository(dbMySql)
 	taskListSevice     service.TaskListService       = service.NewTaskListService(taskListRepository)
 	taskController     controller.TaskController     = controller.NewTaskController(taskListSevice)
-)
+) */
 
 func main() {
 
+	dbUser := os.Getenv("DB_USER")
+	dbPassword := os.Getenv("DB_PASSWORD")
+	dbHost := os.Getenv("DB_HOST")
+	dbPort := os.Getenv("DB_PORT")
+	dbName := os.Getenv("DB_NAME")
 	port := os.Getenv("PORT")
+
+	psqlInfo := fmt.Sprintf("host=%s user=%s password=%s port=%s dbname=%s sslmode=require",
+		dbHost, dbUser, dbPassword, dbPort, dbName)
+
+	db, err := sql.Open("postgres", psqlInfo)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	if port == "" {
 		port = "3000"
 	}
-	defer dbMySql.Close()
-
-	err := dbMySql.Ping()
-	if err != nil {
-		log.Fatal(err)
-		panic(err)
-	}
+	defer db.Close()
 	tesHandler := httprouter.New()
 	tesHandler.GET("/", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) { fmt.Fprint(w, "Success") })
 	server := http.Server{
