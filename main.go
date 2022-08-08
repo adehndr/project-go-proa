@@ -1,12 +1,12 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
 
-	"example.com/adehndr/project_go_proa/app"
 	"github.com/julienschmidt/httprouter"
 	_ "github.com/lib/pq"
 )
@@ -23,8 +23,10 @@ func main() {
 	psqlInfo := fmt.Sprintf("host=%s user=%s password=%s port=%s dbname=%s sslmode=require",
 		dbHost, dbUser, dbPassword, dbPort, dbName)
 
-	db := app.OpenDatabaseConnection(psqlInfo)
-
+	db, err := sql.Open("postgres", psqlInfo)
+	if err != nil {
+		panic(err)
+	}
 	if port == "" {
 		port = "3000"
 	}
