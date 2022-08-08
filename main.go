@@ -20,7 +20,7 @@ var (
 	dbHost             string                        = os.Getenv("DB_USER")
 	dbPort             string                        = os.Getenv("DB_USER")
 	dbName             string                        = os.Getenv("DB_USER")
-	dbMySql            *sql.DB                       = app.OpenDatabaseConnection(dbUser,dbPassword,dbHost,dbPort,dbName)
+	dbMySql            *sql.DB                       = app.OpenDatabaseConnection(dbUser, dbPassword, dbHost, dbPort, dbName)
 	taskListRepository repository.TaskListRepository = repository.NewTaskListRepository(dbMySql)
 	taskListSevice     service.TaskListService       = service.NewTaskListService(taskListRepository)
 	taskController     controller.TaskController     = controller.NewTaskController(taskListSevice)

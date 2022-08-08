@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"os"
 	"time"
 
 	_ "github.com/lib/pq"
@@ -12,7 +11,7 @@ import (
 
 func OpenDatabaseConnection(dbUser string, dbPassword string, dbHost string, dbPort string, dbName string) *sql.DB {
 	psqlInfo := fmt.Sprintf("host=%s user=%s password=%s port=%s dbname=%s sslmode=require",
-	 dbHost, dbUser, dbPassword, dbPort, dbName)
+		dbHost, dbUser, dbPassword, dbPort, dbName)
 	log.Fatal(psqlInfo)
 	db, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
