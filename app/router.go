@@ -10,6 +10,9 @@ import (
 
 func NewRouter(taskController controller.TaskController) *httprouter.Router {
 	router := httprouter.New()
+	router.GET("/test", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+		fmt.Fprint(w,"Test Success")
+	})
 	router.GET("/", taskController.Home)
 	router.GET("/detail", taskController.Detail)
 	router.POST("/detail", taskController.Detail)
@@ -19,8 +22,5 @@ func NewRouter(taskController controller.TaskController) *httprouter.Router {
 	router.POST("/api/tasks", taskController.Create)
 	router.PUT("/api/task/:taskid", taskController.Update)
 	router.DELETE("/api/task/:taskid", taskController.Delete)
-	router.GET("/test", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-		fmt.Fprint(w,"Test Success")
-	})
 	return router
 }
