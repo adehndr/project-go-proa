@@ -10,13 +10,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func OpenDatabaseConnection() *sql.DB {
-
-	dbUser := os.Getenv("DB_USER")
-	dbPassword := os.Getenv("DB_PASSWORD")
-	dbHost := os.Getenv("DB_HOST")
-	dbPort := os.Getenv("DB_PORT")
-	dbName := os.Getenv("DB_NAME")
+func OpenDatabaseConnection(dbUser string, dbPassword string, dbHost string, dbPort string, dbName string) *sql.DB {
 	psqlInfo := fmt.Sprintf("host=%s user=%s password=%s port=%s dbname=%s sslmode=require",
 	 dbHost, dbUser, dbPassword, dbPort, dbName)
 	log.Fatal(psqlInfo)

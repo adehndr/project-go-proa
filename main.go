@@ -15,7 +15,12 @@ import (
 )
 
 var (
-	dbMySql            *sql.DB                       = app.OpenDatabaseConnection()
+	dbUser             string                        = os.Getenv("DB_USER")
+	dbPassword         string                        = os.Getenv("DB_USER")
+	dbHost             string                        = os.Getenv("DB_USER")
+	dbPort             string                        = os.Getenv("DB_USER")
+	dbName             string                        = os.Getenv("DB_USER")
+	dbMySql            *sql.DB                       = app.OpenDatabaseConnection(dbUser,dbPassword,dbHost,dbPort,dbName)
 	taskListRepository repository.TaskListRepository = repository.NewTaskListRepository(dbMySql)
 	taskListSevice     service.TaskListService       = service.NewTaskListService(taskListRepository)
 	taskController     controller.TaskController     = controller.NewTaskController(taskListSevice)
@@ -36,7 +41,7 @@ func main() {
 		panic(err)
 	}
 	tesHandler := httprouter.New()
-	tesHandler.GET("/", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {fmt.Fprint(w,"Success")})
+	tesHandler.GET("/", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) { fmt.Fprint(w, "Success") })
 	server := http.Server{
 		Addr:    ":" + port,
 		Handler: tesHandler,
