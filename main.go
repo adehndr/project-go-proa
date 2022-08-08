@@ -8,14 +8,8 @@ import (
 	"os"
 
 	"github.com/julienschmidt/httprouter"
+	_ "github.com/lib/pq"
 )
-
-/* var (
-	dbMySql            *sql.DB                       = app.OpenDatabaseConnection(dbUser, dbPassword, dbHost, dbPort, dbName)
-	taskListRepository repository.TaskListRepository = repository.NewTaskListRepository(dbMySql)
-	taskListSevice     service.TaskListService       = service.NewTaskListService(taskListRepository)
-	taskController     controller.TaskController     = controller.NewTaskController(taskListSevice)
-) */
 
 func main() {
 
