@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -18,7 +19,6 @@ var (
 	taskListRepository repository.TaskListRepository = repository.NewTaskListRepository(dbMySql)
 	taskListSevice     service.TaskListService       = service.NewTaskListService(taskListRepository)
 	taskController     controller.TaskController     = controller.NewTaskController(taskListSevice)
-	taskRouter         *httprouter.Router            = (*httprouter.Router)(app.NewRouter(taskController))
 )
 
 func main() {
@@ -35,9 +35,11 @@ func main() {
 		log.Fatal(err)
 		panic(err)
 	}
+	tesHandler := httprouter.New()
+	tesHandler.GET("/", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {fmt.Fprint(w,"Success")})
 	server := http.Server{
 		Addr:    ":" + port,
-		Handler: taskRouter,
+		Handler: tesHandler,
 	}
 	log.Fatal(server.ListenAndServe())
 }
