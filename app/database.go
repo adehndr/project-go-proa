@@ -23,6 +23,7 @@ func OpenDatabaseConnection() *sql.DB {
 	db, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
 		log.Fatal(err)
+		panic(err)
 	}
 	db.SetConnMaxIdleTime(time.Minute * 3)
 	db.SetMaxOpenConns(10)

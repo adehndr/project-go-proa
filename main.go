@@ -25,6 +25,7 @@ func main() {
 	err := dbMySql.Ping()
 	if err != nil {
 		log.Fatal(err)
+		panic(err)
 	}
 	taskListRepository := repository.NewTaskListRepository(dbMySql)
 	taskListSevice := service.NewTaskListService(taskListRepository)
