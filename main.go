@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"log"
@@ -10,6 +11,7 @@ import (
 
 	"example.com/adehndr/project_go_proa/app"
 	"example.com/adehndr/project_go_proa/controller"
+	"example.com/adehndr/project_go_proa/helper"
 	"example.com/adehndr/project_go_proa/repository"
 	"example.com/adehndr/project_go_proa/service"
 	_ "github.com/lib/pq"
@@ -31,6 +33,7 @@ func main() {
 	db.SetConnMaxIdleTime(time.Minute * 3)
 	db.SetMaxOpenConns(10)
 	db.SetMaxIdleConns(10)
+	helper.InitializeDatabase(db,context.Background())
 	if err != nil {
 		panic(err)
 	}
